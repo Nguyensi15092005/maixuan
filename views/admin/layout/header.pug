@@ -1,0 +1,38 @@
+.header
+  .container
+    .row 
+      .col-4 
+        .box-search 
+          form(
+            action=""
+            method="GET"
+          ) 
+            div(class="form-gruop d-flex mb-0")
+              input(
+                type="text"
+                name="keyword"
+                placeholder="Tìm kiếm hàng hóa"
+                class="form-control"
+                value=keyword
+              )
+          .inner-suggest 
+            .inner-list 
+              
+      .col-5.d-flex.align-items-center
+        .center
+          a(href="" class="hoadon") Hóa đơn 1 
+      .col-3
+        .right
+          .icon-menu admin <i class="fa-solid fa-bars"></i>
+          ul(class="menu-silbar")
+            li 
+              a(href=`${prefixAdmin}/dashboard/baocaocuoingay`) <i class="fa-solid fa-eye"></i> Xem báo cáo cuối ngày
+            li 
+              a(href="") <i class="fa-solid fa-file-pen"></i> Lập phiếu thu
+            li 
+              a(href=`${prefixAdmin}/dashboard/manager`) <i class="fa-solid fa-bars-progress"></i> Quản lý
+            li 
+              a(href=`${prefixAdmin}/auth/logout`) <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+
+
+

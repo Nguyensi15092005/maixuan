@@ -1,0 +1,24 @@
+extends ../../layout/defaulManager.pug
+
+block main 
+  h2(class="text-center") Báo cáo cuối ngày về bán hàng
+  p(class="text-center time-baocao")
+  div(class="text-center")
+    table(class="table table-hover table-sm")
+      thead 
+        tr
+          th Mã giao dịch
+          th số lượng hóa đơn 
+          th Doanh thu đã trả 
+          th Doanh thu nợ
+
+      tbody 
+        tr 
+          th Hóa đơn 
+          th #{soluonghoadon}
+          th #{doanhthudatra}
+          th #{doanhthuno}
+
+
+
+

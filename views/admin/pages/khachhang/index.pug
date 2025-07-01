@@ -1,0 +1,89 @@
+extends ../../layout/defaulManager.pug
+include ../../mixins/alert.pug
+include ../../mixins/search-form.pug
+include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi.pug
+include ../../mixins/moment.pug
+
+block main 
+  +alert-success("5000")
+  +alert-error("5000")
+
+  h2 Khách hàng
+  .card.mb-3 
+    .card-header Tìm kiếm
+    .card-body
+      .row 
+        .col-6 
+          +search-form(keyword)
+
+          
+  .card.mb-3 
+    .card-header Danh sách
+    .card-body
+      table(
+        class="table table-hover table-sm"
+        checkbox-multi
+      )
+      
+        .row  
+          .col-8 
+            +form-change-multiDel(`${prefixAdmin}/khachhang/change-multi?_method=PATCH`)
+          .col-4
+            a(
+              href=`${prefixAdmin}/khachhang/create`
+              class="btn btn-outline-success active"
+            ) +Thêm mới
+        
+        thead 
+          tr
+            th 
+              input(type="checkbox" name="checkall")
+            th STT
+            th Tên khách hàng
+            th Điện thoại
+            th Nợ hiện tại
+            th Tổng bán
+            th Hành động
+        tbody
+          tr 
+            td
+            td 
+            td 
+            td 
+            td #{sumno}
+            td #{sumban}
+            td
+          each item,index in khachhang
+            tr
+              td 
+                input(
+                  type="checkbox"
+                  name="id"
+                  value=item.id
+                )
+              td #{pagenation.limitItems * (pagenation.currentPage-1) + (index+1)}
+              td #{item.name}
+              td #{item.phone}
+              td #{item.inDebt}
+              td #{item.tongban}
+              td
+                a(
+                  href=`${prefixAdmin}/khachhang/edit/${item.id}`
+                  class="btn btn-warning"
+                ) <i class="fa-solid fa-screwdriver-wrench"></i> Sửa
+                button(
+                  class="btn btn-danger ml-2"
+                  button-delete
+                  data-id=item.id
+                ) <i class="fa-solid fa-trash"></i> Xóa
+                
+  nav 
+    +pagination(pagenation)
+
+  form(
+    action=""
+    method="POST"
+    id="form-delete-item"
+    data-path=`${prefixAdmin}/khachhang/delete`
+  ) 

@@ -1,0 +1,100 @@
+extends ../../layout/default.pug
+include ../../mixins/alert.pug
+
+block main 
+  +alert-success("5000")
+  +alert-error("5000")
+  .container-fluid
+    .row 
+      .col-9.scroll 
+        .body-list-hh
+      .col-3 
+        .body-thanhtoan
+          div(class="header-thanhtoan")
+            span Mai Xuân
+
+          .thanh-toan-search 
+            form(
+              action=""
+              method="GET"
+            ) 
+              div(class="form-gruop d-flex mb-0")
+                input(
+                  type="text"
+                  name="key"
+                  placeholder="Tìm kiếm khách hàng"
+                  class="form-control input-thanhtoan"
+                  
+                )
+            .innet-ss 
+              .inner-list-ss
+
+          form(
+            id="form-thanhtoan"
+            action=`${prefixAdmin}/hoadon/create`
+            method="POST"
+          ) 
+           
+            input(
+                type="hidden"
+                class="form-control"
+                name="id_kh"
+            )
+            input(
+              type="hidden" 
+              id="ds_hanghoa" 
+              name="hanghoa"
+            )
+            div(class="form-group")
+              span(class="no") Nợ: 0
+            div(class="form-group d-flex justify-content-between")
+              span Tổng tiền hàng
+              div sl <span class="so-luong">0</span>
+              input(
+                readonly
+                name="tongtienhang"
+                class="tong-tien"
+                value="0"
+              )
+            div(class="form-group d-flex justify-content-between")
+              span(class="font-weight-bold") Khách phải trả
+              input(
+                readonly
+                class="tong-tien"
+                value="0"
+              )
+            div(class="form-group form-check form-check-inline")
+              input(
+                type="radio"
+                class="form-check-input"
+                id="tienmat"
+                name="status"
+                value="tienmat"
+                checked
+              )
+              label(for="tienmat" class="form-check-label") Tiền mặt
+            div(class="form-group form-check form-check-inline")
+              input(
+                type="radio"
+                class="form-check-input"
+                id="chuyenkhoan"
+                name="status"
+                value="chuyenkhoan"
+              )
+              label(for="chuyenkhoan" class="form-check-label") Chuyển khoản
+
+            br
+            div(class="form-group form-check form-check-inline")
+              input(
+                type="checkbox"
+                class="form-check-input"
+                id="no"
+                name="no"
+                value="no"
+              )
+              label(for="no" class="form-check-label") Tính vào công nợ
+
+            div(class="form-group")
+              button(class="form-control btn btn-primary d-block") Thanh toán
+
+      

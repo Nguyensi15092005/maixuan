@@ -1,0 +1,47 @@
+extends ../../layout/defaulManager.pug
+include ../../mixins/alert.pug
+
+
+
+block main 
+  +alert-error(5000)
+  +alert-success(5000)
+
+  h2(class="mb-4") Thêm mới khach hàng
+  form(
+    action=""
+    id="form-create-khachhang"
+    method="POST"
+  ) 
+    div(class="form-group")
+      label(for="name") Tên khách hàng
+      input(
+        type="text"
+        id="name"
+        name="name"
+        class="form-control"
+        required
+      )
+    div(class="form-group")
+      label(for="phone") Số điện thoại
+      input(
+        type="text"
+        class="form-control"
+        id="phone"
+        name="phone"
+        required
+      )
+    div(class="form-group")
+      label(for="inDebt") Nợ hiện tại
+      input(
+        type="number"
+        class="form-control"
+        id="inDebt"
+        name="inDebt"
+        value="0"
+      )
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới

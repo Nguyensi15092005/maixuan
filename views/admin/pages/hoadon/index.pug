@@ -1,0 +1,63 @@
+extends ../../layout/defaulManager.pug
+include ../../mixins/alert.pug
+include ../../mixins/search-form.pug
+include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi.pug
+include ../../mixins/moment.pug
+
+block main 
+  +alert-success("5000")
+  +alert-error("5000")
+
+  h2 Hóa đơn
+  //- .card.mb-3 
+  //-   .card-header Tìm kiếm
+  //-   .card-body
+  //-     .row 
+  //-       .col-6 
+  //-         +search-form(keyword)
+
+          
+  .card.mb-3 
+    .card-header Danh sách
+    .card-body
+      table(
+        class="table table-hover table-sm"
+        checkbox-multi
+      )
+      
+        
+        thead 
+          tr
+            th STT
+            th Thời gian
+            th Khách hàng
+            th Tổng tiền hàng
+            th Khách đã trả
+            th Hành động
+        tbody
+          each item,index in hoadon
+            tr
+              td #{pagenation.limitItems * (pagenation.currentPage-1) + (index+1)}
+              td 
+                +formatDateTime(item.createdAt)
+              //- td #{item.infokhachhang.name}
+              td #{item.nameKH}
+              td #{item.tongtienhang}đ
+              td #{item.tongtienhang}đ
+              td
+                button(
+                  class="btn btn-danger ml-2"
+                  button-delete
+                  data-id=item.id
+                ) <i class="fa-solid fa-trash"></i> Xóa
+                
+  nav 
+    +pagination(pagenation)
+
+  form(
+    action=""
+    method="POST"
+    id="form-delete-item"
+    data-path=`${prefixAdmin}/hoadon/delete`
+  ) 

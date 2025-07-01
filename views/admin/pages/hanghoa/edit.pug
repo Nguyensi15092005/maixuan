@@ -1,0 +1,62 @@
+extends ../../layout/defaulManager.pug
+include ../../mixins/alert.pug
+
+
+
+block main 
+  +alert-error(5000)
+  +alert-success(5000)
+
+  h2(class="mb-4") Chỉnh sửa Hàng hóa
+  form(
+    action=`${prefixAdmin}/hanghoa/edit/${hanghoa.id}?_method=PATCH`
+    id="form-edit-hanghoa"
+    method="POST"
+  ) 
+    div(class="form-group")
+      label(for="title") Tên Hàng hóa
+      input(
+        type="text"
+        id="title"
+        name="title"
+        class="form-control"
+        value=hanghoa.title
+        required
+      )
+    div(class="form-group")
+      label(for="") Nhà cung cấp
+      select(class="form-control" name="id_ncc")
+        each item in nhacungcap
+          option(value=item.id selected=(hanghoa.id_ncc == item.id ? true : false)) #{item.title}
+    div(class="form-group")
+      label(for="sellingPrice") Giá bán
+      input(
+        type="number"
+        class="form-control"
+        id="sellingPrice"
+        name="sellingPrice"
+        value=hanghoa.sellingPrice
+      )
+    div(class="form-group")
+      label(for="capitalPrice") Giá vốn
+      input(
+        type="number"
+        class="form-control"
+        id="capitalPrice"
+        name="capitalPrice"
+        value=hanghoa.capitalPrice
+      )
+    div(class="form-group")
+      label(for="inventory") Tồn kho
+      input(
+        type="number"
+        class="form-control"
+        id="inventory"
+        name="inventory"
+        value=hanghoa.inventory
+      )
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Submit

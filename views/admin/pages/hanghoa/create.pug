@@ -1,0 +1,63 @@
+extends ../../layout/defaulManager.pug
+include ../../mixins/alert.pug
+
+
+
+block main 
+  +alert-error(5000)
+  +alert-success(5000)
+
+  h2(class="mb-4") Thêm mới Hàng hóa
+  form(
+    action=""
+    id="form-create-hanghoa"
+    method="POST"
+  ) 
+    div(class="form-group")
+      label(for="title") Tên Hàng hóa
+      input(
+        type="text"
+        id="title"
+        name="title"
+        class="form-control"
+        required
+      )
+
+    div(class="form-group")
+      label(for="") Chọn nhà cung cấp
+      select(class="form-control" name="id_ncc")
+        option(value="" selected disable) ---Chọn nhà cung cấp---
+        each item in nhacungcap
+          option(value=item.id ) #{item.title} 
+    div(class="form-group")
+      label(for="sellingPrice") Giá bán
+      input(
+        type="number"
+        class="form-control"
+        id="sellingPrice"
+        name="sellingPrice"
+        value="0"
+      )
+    div(class="form-group")
+      label(for="capitalPrice") Giá vốn
+      input(
+        type="number"
+        class="form-control"
+        id="capitalPrice"
+        name="capitalPrice"
+        value="0"
+      )
+    div(class="form-group")
+      label(for="inventory") Tồn kho
+      input(
+        type="number"
+        class="form-control"
+        id="inventory"
+        name="inventory"
+        value="0"
+      )
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới
