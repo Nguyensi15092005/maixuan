@@ -10,8 +10,7 @@ const searchHH = require("./search-hh.route");
 const searchKH = require("./search-kh.route");
 const accoutRoute = require("./account.route");
 const authRouter = require("./auth.route");
-
-const APIPrintRouter = require("./APIprint.route");
+const doanhthuRouter = require("./doanhthu.route");
 
 
 module.exports = (app) => {
@@ -32,7 +31,7 @@ module.exports = (app) => {
 
     app.use(Admin + '/account',authMiddleware.requireAuth, accoutRoute);
 
-    app.use('/api',authMiddleware.requireAuth, APIPrintRouter);
+    app.use(Admin + '/doanhthu',authMiddleware.requireAuth, doanhthuRouter);
 
     app.use(Admin + '/auth', authRouter);
 

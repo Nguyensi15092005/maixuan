@@ -1,7 +1,7 @@
 {
   "name": "web-ban-nuoc",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "start": "nodemon --inspect index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,8 +13,6 @@
     "body-parser": "^2.2.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",
-    "escpos": "^3.0.0-alpha.6",
-    "escpos-usb": "^3.0.0-alpha.4",
     "express": "^5.1.0",
     "express-flash": "^0.0.2",
     "express-session": "^1.18.1",
@@ -24,10 +22,14 @@
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.0",
     "mongoose-slug-updater": "^3.3.0",
+    "node-cron": "^4.2.0",
+    "printer": "^0.4.0",
     "pug": "^3.0.3",
     "unidecode": "^1.1.0"
   },
   "devDependencies": {
+    "electron": "^37.2.0",
+    "electron-packager": "^17.1.2",
     "nodemon": "^3.1.10"
   }
 }

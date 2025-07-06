@@ -25,6 +25,11 @@ const port = process.env.POST || 3003;
 //nhung file routes vao
 const routeAdmin = require("./routes/admin/index.routes");
 
+// createdoanhthu 0h01
+const createDoanhthu = require("./helper/crerateDoanhThu");
+
+
+
 const app = express();
 
 // thư viện method-override dùng để gi đè phương thức trong html
@@ -39,6 +44,8 @@ app.use(cookieParser('SISISISISISISI'));
 app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
 //end flash
+
+createDoanhthu();
 
 app.use(express.static(`${__dirname}/public`));
 
@@ -57,3 +64,11 @@ routeAdmin(app);
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })  
+
+
+
+// "scripts": {
+//     "start": "electron .",
+//     "dev": "nodemon index.js",
+//     "package": "electron-packager . web-ban-nuoc --platform=win32 --arch=x64 --overwrite --out=dist"
+//   },

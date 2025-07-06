@@ -386,21 +386,21 @@ const handleclickKH = (id, name, inDebt) => {
 // print
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('form-thanhtoan');
+  
 
   form.addEventListener('submit', async function (e) {
-    e.preventDefault(); //  Chặn submit ban đầu
+    const inputThanhtoan = document.querySelector("input[name='id_kh']");
+    if(inputThanhtoan.value != ""){ 
+    e.preventDefault(); // Chặn submit form
 
-    const formData = new FormData(form);
     const raw = document.getElementById('ds_hanghoa').value;
     const ds_hanghoa = raw ? JSON.parse(raw) : [];
 
-    const total = parseInt(formData.get('tongtienhang')) || 0;
-
-    //  Hàm chuyển số thành chữ (tiếng Việt đơn giản)
-    function toWordsVietnamese(number) {
-      const n2w = window.n2vi || function (n) { return n + " đồng"; };
-      return n2w(number);
-    }
+    const total = ds_hanghoa.reduce((sum, item) => {
+      const price = parseInt((item.dongia + "").replace(/\./g, ""));
+      const qty = parseInt(item.soluong);
+      return sum + price * qty;
+    }, 0);
 
     const data = {
       date: new Date().toLocaleString('vi-VN'),
@@ -408,40 +408,179 @@ document.addEventListener('DOMContentLoaded', function () {
       customer: document.querySelector("input[name='key']").value || "Khách lẻ",
       address: "--",
       items: ds_hanghoa.map(item => ({
-        name: item.title,
-        price: item.capitalPrice,
-        quantity: item.quantity,
-        total: item.capitalPrice * item.quantity
+        name: item.ten_hh,
+        price: item.dongia,
+        quantity: item.soluong,
+        total: item.dongia * item.soluong
       })),
       total: total,
       oldDebt: 0,
       grandTotal: total,
-      totalInWords: toWordsVietnamese(total),
-      qrData: `https://img.vietqr.io/image/MB-879888999.png?amount=${total}&accountName=MAI%20XUAN`
     };
-    
 
-    try {
-      console.log(data)
-      const response = await fetch('/api/print', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+    const invoiceHTML = `
+      <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>Hóa đơn bán hàng</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              font-size: 14px;
+              width: 80mm;
+              margin: 0 auto;
+              padding: 10px;
+            }
+            .center { text-align: center; }
+            .bold { font-weight: bold; }
+            table { width: 100%; border-collapse: collapse; }
+            td { padding: 2px 0; }
+            .total { font-weight: bold; }
+            hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
+            img.qr { margin-top: 10px; width: 120px; }
 
-      const result = await response.json();
+            @media print {
+              @page {
+                size: 80mm auto;
+                margin: 0;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="center bold">CỬA HÀNG MAI XUÂN</div>
+          <div class="center">HÓA ĐƠN BÁN HÀNG</div>
+          <div>Ngày: ${data.date}</div>
+          <div>NV giao hàng: ${data.staff}</div>
+          <div>Khách hàng: ${data.customer}</div>
+          <div>SĐT: --</div>
+          <div>Địa chỉ: ${data.address}</div>
 
-      if (result.success) {
-        form.submit(); // ✅ Gửi form sau khi in thành công
-      } else {
-        alert('Không in được hóa đơn: ' + result.message);
-      }
-    } catch (err) {
-      alert('Lỗi khi gửi yêu cầu in hóa đơn');
-      console.error(err);
-    }
+          <hr>
+
+          <table>
+            ${data.items.map(item => `
+              <tr><td colspan="3"><b>${item.name}</b></td></tr>
+              <tr>
+                <td>${item.price.toLocaleString('vi-VN')}đ</td>
+                <td>x${item.quantity}</td>
+                <td style="text-align:right">${item.total.toLocaleString('vi-VN')}đ</td>
+              </tr>
+            `).join('')}
+          </table>
+
+          <hr>
+
+          <table>
+            <tr>
+              <td><b>Tổng tiền hàng:</b></td>
+              <td style="text-align:right">${data.total.toLocaleString('vi-VN')}đ</td>
+            </tr>
+            <tr>
+              <td class="bold">Tổng thu:</td>
+              <td class="bold" style="text-align:right">${data.grandTotal.toLocaleString('vi-VN')}đ</td>
+            </tr>
+          </table>
+
+          <hr>
+
+          <div class="center">
+            <img class="qr" src="/admin/img/QR.png" />
+          </div>
+
+          <div class="center">Cảm ơn và hẹn gặp lại!</div>
+
+          <script>
+            window.onload = function () {
+              window.print();
+              window.onafterprint = function () {
+                window.close();
+              };
+            };
+          </script>
+        </body>
+      </html>
+    `;
+
+    // Mở popup và in
+    const printWindow = window.open('', '', 'width=800,height=600');
+    printWindow.document.write(invoiceHTML);
+    printWindow.document.close();
+
+    // Gửi lại form sau khi in
+    setTimeout(() => {
+      form.submit();
+    }, 1000);
+    }else{
+  alert("Vui lòng chọn khách hàng");
+  }
   });
 });
+
+
+
+
+
+
+// document.addEventListener('DOMContentLoaded', function () {
+//   const form = document.getElementById('form-thanhtoan');
+
+//   form.addEventListener('submit', async function (e) {
+//     e.preventDefault(); //  Chặn submit ban đầu
+
+//     const formData = new FormData(form);
+//     const raw = document.getElementById('ds_hanghoa').value;
+//     const ds_hanghoa = raw ? JSON.parse(raw) : [];
+
+//     const total = parseInt(formData.get('tongtienhang')) || 0;
+
+//     //  Hàm chuyển số thành chữ (tiếng Việt đơn giản)
+//     function toWordsVietnamese(number) {
+//       const n2w = window.n2vi || function (n) { return n + " đồng"; };
+//       return n2w(number);
+//     }
+//     console.log(ds_hanghoa)
+
+//     const data = {
+//       date: new Date().toLocaleString('vi-VN'),
+//       staff: "Mai Xuân",
+//       customer: document.querySelector("input[name='key']").value || "Khách lẻ",
+//       address: "--",
+//       items: ds_hanghoa.map(item => ({
+//         name: item.ten_hh,
+//         price: item.dongia,
+//         quantity: item.soluong,
+//         total: item.dongia * item.soluong
+//       })),
+//       total: total,
+//       oldDebt: 0,
+//       grandTotal: total,
+//       totalInWords: toWordsVietnamese(total),
+//       qrData: `https://img.vietqr.io/image/MB-879888999.png?amount=${total}&accountName=MAI%20XUAN`
+//     };
+    
+
+//     try {
+//       console.log(data)
+//       const response = await fetch('/api/print', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(data)
+//       });
+
+//       const result = await response.json();
+
+//       if (result.success) {
+//         form.submit(); // ✅ Gửi form sau khi in thành công
+//       } else {
+//         alert('Không in được hóa đơn: ' + result.message);
+//       }
+//     } catch (err) {
+//       alert('Lỗi khi gửi yêu cầu in hóa đơn');
+//       console.error(err);
+//     }
+//   });
+// });
 // end print
 
 

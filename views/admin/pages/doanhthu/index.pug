@@ -1,0 +1,44 @@
+extends ../../layout/defaulManager.pug
+include ../../mixins/alert.pug
+include ../../mixins/search-form.pug
+include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi.pug
+include ../../mixins/moment.pug
+
+block main 
+  +alert-success("5000")
+  +alert-error("5000")
+
+  h2 Doanh thu từng ngày trong 1 tháng  
+  .card.mb-3 
+    .card-header Danh sách
+    .card-body
+      table(
+        class="table table-hover table-sm"
+        checkbox-multi
+      )
+        thead 
+          tr
+            th STT
+            th Ngày
+            th Số lượng hóa đơn
+            th Tổng doanh thu đã trả
+            th Tổng doanh thu nợ
+        tbody
+          each item,index in doanhthu
+            tr
+              td #{pagenation.limitItems * (pagenation.currentPage-1) + (index+1)}
+              td 
+                +formatDate(item.createdAt)
+              td #{item.order_count}
+              td #{item.total_tra}
+              td #{item.total_no}
+  nav 
+    +pagination(pagenation)
+
+  form(
+    action=""
+    method="POST"
+    id="form-delete-item"
+    data-path=`${prefixAdmin}/hoadon/delete`
+  ) 

@@ -3,6 +3,7 @@ const Hoadon = require("../models/hoadon.model");
 const paginationHelper = require("../helper/pagination");
 const system = require("../config/system");
 const Khachhang = require("../models/khachhang.model");
+
 module.exports.index = async (req, res) => {
   let find = {
     deleted: false
@@ -52,6 +53,11 @@ module.exports.create = async (req, res) => {
     req.body.tongtienhang = parseInt(req.body.tongtienhang.replace(/\./g, ''), 10);
     req.body.hanghoa = JSON.parse(req.body.hanghoa)
     const id_kh = req.body.id_kh;
+    if(id_kh==""){
+      req.flash("error", "bạn chưa chọn khách hàng vui lòng tạo lại hóa đơn");
+      res.redirect(`${system.prefixAdmin}/dashboard`);
+      return;
+    }
     const no = req.body.no;
     if (no === "no") {
       const khachhang = await Khachhang.findOne({

@@ -15,7 +15,7 @@ const HoadonSchema = new mongoose.Schema({
     expireAt: { //thời gian nó tự đông hết hạng lấy thời gian hiện tại + 10ss
         type: Date,
         default: Date.now,
-        expires: 60 * 60 * 24 * 7 // sau 1 tuần thì hóa đơn sẻ tự động cóa khỏi db
+        expires: 60 * 60 * 24 * 30 // sau 1 tháng thì hóa đơn sẻ tự động cóa khỏi db
     },
     status: String,
     deleted: {
